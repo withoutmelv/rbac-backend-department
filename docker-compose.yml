@@ -1,0 +1,28 @@
+version: '3'
+services:
+  rbac-backend:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DB_HOST=mysql
+      - DB_USER=root
+      - DB_PASSWORD=123456
+      - DB_NAME=sys
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:8.0.29
+    privileged: true
+    user: root
+    # command: --default-authentication-plugin=mysql_native_pas
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=sys
+    volumes:
+      - ./app/doc/sql:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+volumes:
+  mysql_data:
