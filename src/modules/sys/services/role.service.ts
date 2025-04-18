@@ -54,8 +54,8 @@ class RoleService{
 
         const where: any = { ...params };
         if (!isAdmin && deptId) {
-            (where as any).deptId = In([deptId, '-'])
-        } else if (!isAdmin && !deptId) {
+            (where as any).deptId = deptId
+        }else if (!isAdmin && !deptId) {
             (where as any).deptId = '-'
         }
         

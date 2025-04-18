@@ -110,7 +110,7 @@ class UserService{
 
         const where: any = { ...params, adminType: AdminTypeEnum.COMMON_ADMIN.getCode(), isDeleted: 0 };
         if (!isAdmin && deptId) {
-            (where as any).deptId = In([deptId, '-'])
+            (where as any).deptId = deptId
         } else if (!isAdmin && !deptId) {
             (where as any).deptId = '-'
         }
@@ -162,4 +162,4 @@ class UserService{
     }
 
 }
-export default  new UserService();
+export default new UserService();

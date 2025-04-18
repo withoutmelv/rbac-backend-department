@@ -59,9 +59,9 @@ class KnowledgeService {
     const where: any = { ...params };
 
     if (!isAdmin && deptId) {
-      where.deptId = In([deptId, '-'])
-    } else if (!isAdmin && !deptId) {
-      where.deptId = '-'
+      (where as any).deptId = deptId
+    }else if (!isAdmin && !deptId) {
+      (where as any).deptId = '-'
     }
     const [data, total] = await this.repository.findAndCount({
       where,
