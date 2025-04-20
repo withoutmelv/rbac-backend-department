@@ -5,13 +5,13 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DB_HOST=mysql
+      - DB_PORT=3306
       - DB_USER=root
       - DB_PASSWORD=123456
       - DB_NAME=sys
     depends_on:
-      - mysql
-  mysql:
+      - mysql_rbac
+  mysql_rbac:
     image: mysql:8.0.29
     privileged: true
     user: root
@@ -20,9 +20,7 @@ services:
       - MYSQL_ROOT_PASSWORD=123456
       - MYSQL_DATABASE=sys
     volumes:
-      - ./app/doc/sql:/var/lib/mysql
+      - ./mysqlData:/var/lib/mysql
+      - ./doc/sql:/docker-entrypoint-initdb.d
     ports:
-      - "3306:3306"
-
-volumes:
-  mysql_data:
+      - "3308:3306"
