@@ -10,12 +10,17 @@ import { loadRoutes } from './utils/load-routes';
 import { errorHandler } from './utils/error-handler';
 import { authMiddleware } from './middlewares/auth-middleware';
 import getEnumParser from './utils/enum-parser';
+import cors from 'koa-cors'; // 引入 koa-cors 中间件
 
 // 加载环境变量
 dotenv.config({ path: `.env.${process.env.NODE_ENV || 'development'}` })
 // 初始化单例枚举解析器，假设你的项目根目录是 __dirname
 getEnumParser(__dirname).init();
 const app = new Koa();
+
+// 添加跨域中间件
+app.use(cors());
+
 // 全局错误处理中间件
 app.use(errorHandler())
 // 权限拦截器

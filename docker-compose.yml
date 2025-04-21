@@ -5,12 +5,15 @@ services:
     ports:
       - "3000:3000"
     environment:
+      - DB_HOST=mysql_rbac  # 明确指定主机名
       - DB_PORT=3306
       - DB_USER=root
       - DB_PASSWORD=123456
       - DB_NAME=sys
     depends_on:
-      - mysql_rbac
+      mysql_rbac:
+        condition: service_healthy  # 等待MySQL健康
+
   mysql_rbac:
     image: mysql:8.0.29
     privileged: true
@@ -24,3 +27,20 @@ services:
       - ./doc/sql:/docker-entrypoint-initdb.d
     ports:
       - "3308:3306"
+    healthcheck:  # 健康检查
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p123456"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+
+  # 新增前端服务配置
+  rbac-frontend:
+    # 使用已打好的前端镜像，需替换为你实际的镜像名和标签
+    image: vben:latest 
+    ports:
+      - "80:80"  # 将容器的 80 端口映射到宿主机的 80 端口
+      - "8080:8080"
+    # extra_hosts:
+    #   - "host.docker.internal:host-gateway"  # Linux需要这个
+    depends_on:
+      - rbac-backend  # 前端依赖后端服务
