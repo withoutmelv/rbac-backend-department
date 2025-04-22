@@ -1,10 +1,11 @@
 version: '3'
 services:
   rbac-backend:
-    build: .
+    image: rbac-backend
     ports:
-      - "3000:3000"
+      - "3001:3001"
     environment:
+      - PORT=3001
       - DB_HOST=mysql_rbac  # 明确指定主机名
       - DB_PORT=3306
       - DB_USER=root
@@ -36,10 +37,9 @@ services:
   # 新增前端服务配置
   rbac-frontend:
     # 使用已打好的前端镜像，需替换为你实际的镜像名和标签
-    image: vben:latest 
+    image: rbac-frontend
     ports:
-      - "80:80"  # 将容器的 80 端口映射到宿主机的 80 端口
-      - "8080:8080"
+      - "8888:8888"
     # extra_hosts:
     #   - "host.docker.internal:host-gateway"  # Linux需要这个
     depends_on:
