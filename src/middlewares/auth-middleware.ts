@@ -11,6 +11,7 @@ const whiteList = getConfig().WHITE_LIST
 export const authMiddleware = ()=> {
     return async (ctx: Context, next: Next) => {
         await namespace.runAndReturn(async () => {
+            console.log('ctx.url',ctx.url)
             if (!whiteList.includes(ctx.url)) {
                 let token = ctx.request.header.authorization;
                 if (token) {
