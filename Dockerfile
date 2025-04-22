@@ -18,7 +18,7 @@ RUN npm install
 COPY . .
 
 # 暴露服务端口，根据 README 推测为 3000
-EXPOSE 3000
+EXPOSE 3001
 
 # 启动服务
 CMD ["npm", "run", "start"]
