@@ -12,6 +12,7 @@ export class PageParam<T>{
   includeIds?: string[];
   includeType?: number;
   extFieldNames?: string;
+  deptId?: string;
   /**
    * 构建并执行查询
    * @param queryParam 查询参数

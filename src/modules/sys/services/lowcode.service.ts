@@ -31,7 +31,10 @@ class LowcodeService {
         }
         queryBuilder.where(`${valueKey} IN (:...includeIds)`, { includeIds: param.includeIds });
       }
-    
+      
+      if (param.deptId) {
+        queryBuilder.andWhere('dept_id = :deptId', { deptId: param.deptId });
+      }
       // 执行查询
       let entities = await queryBuilder.getMany();
     
