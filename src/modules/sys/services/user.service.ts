@@ -95,39 +95,26 @@ class UserService{
     }
     // 分页查询方法
     async page(param: UserPageParam): Promise<{ rows: User[], recordCount: number, totalPage: number }> {
-        console.log(param);
-        // const data = await param.findWithQuery(this.userRepository, async (user: User) => {
-        //     // 追加角色ID
-        //     user.roleIds = (await this.userRoleRepository.findBy({ userId: user.id }))
-        //       .map(userRole => userRole.roleId)
-        //       .join(',');
-        //   },(qb: any)=>{
-        //     // 仅查询普通管理员
-        //     qb.andWhere(`entity.adminType = :adminType`,{adminType: AdminTypeEnum.COMMON_ADMIN.getCode()})
-        //     return qb
-        //   });
-        const { deptId, isAdmin, pageNum, pageSize, ...params } = param as any;
-
-        const where: any = { ...params, adminType: AdminTypeEnum.COMMON_ADMIN.getCode(), isDeleted: 0 };
+        const { deptId, isAdmin } = param as any;
         if (!isAdmin && deptId) {
-            (where as any).deptId = deptId
-        } else if (!isAdmin && !deptId) {
-            (where as any).deptId = '-'
+            (param as any).deptId = deptId
+        }else if (!isAdmin && !deptId) {
+            (param as any).deptId = '-'
+        }else if (isAdmin){
+            delete (param as any).deptId;
         }
-          
-        const [data, total] = await this.userRepository.findAndCount({
-            where,
-            skip: (pageNum - 1) * pageSize,
-            take: pageSize,
-        });
-        if (data && data.length > 0) {
-            for (const user of data) {
-                user.roleIds = (await this.userRoleRepository.findBy({ userId: user.id }))
-                    .map(userRole => userRole.roleId)
-                    .join(',');
-            }
-        }
-        return { rows: data, totalPage: Math.ceil(total / pageSize), recordCount: total };
+        delete (param as any).isAdmin;
+        const data = await param.findWithQuery(this.userRepository, async (user: User) => {
+            // 追加角色ID
+            user.roleIds = (await this.userRoleRepository.findBy({ userId: user.id }))
+              .map(userRole => userRole.roleId)
+              .join(',');
+          },(qb: any)=>{
+            // 仅查询普通管理员
+            qb.andWhere(`entity.adminType = :adminType`,{adminType: AdminTypeEnum.COMMON_ADMIN.getCode()})
+            return qb
+          });
+        return data;
     }
     // 详情
     async detail(id: string): Promise<User | null> {

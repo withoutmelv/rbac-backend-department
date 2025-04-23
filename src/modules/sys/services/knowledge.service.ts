@@ -3,6 +3,7 @@ import { AppDataSource } from '../../../utils/data-source';
 import { Knowledge } from '../entities/knowledge';
 import { plainToClass } from "class-transformer";
 import { generateId } from "../../../utils/snowflake-id-generator";
+import { KnowledgePageParam } from '../params/knowledge.param';
 
 interface PageQuery {
   current?: number;
@@ -54,21 +55,17 @@ class KnowledgeService {
     return this.repository.findOneBy({ id });
   }
 
-  async page(query: PageQuery): Promise<PageResult<Knowledge>> {
-    const { current = 1, size = 10, deptId, isAdmin, ...params } = query;
-    const where: any = { ...params };
-
+  async page(param: KnowledgePageParam): Promise<{ rows: Knowledge[], recordCount: number, totalPage: number }> {
+    const { deptId, isAdmin } = param as any;
     if (!isAdmin && deptId) {
-      (where as any).deptId = deptId
+      (param as any).deptId = deptId
     }else if (!isAdmin && !deptId) {
-      (where as any).deptId = '-'
+      (param as any).deptId = '-'
+    }else if (isAdmin){
+      delete (param as any).deptId;
     }
-    const [data, total] = await this.repository.findAndCount({
-      where,
-      skip: (current - 1) * size,
-      take: size,
-    });
-    return { rows: data, totalPage: Math.ceil(total / size), recordCount: total };
+    delete (param as any).isAdmin;
+    return param.findWithQuery(this.repository);
   }
 }
 

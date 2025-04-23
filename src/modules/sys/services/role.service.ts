@@ -50,21 +50,16 @@ class RoleService{
     // 分页查询方法
     async page(param: RolePageParam): Promise<{ rows: Role[], recordCount: number, totalPage: number }> {
         
-        const { deptId, isAdmin, pageNum, pageSize, ...params } = param as any;
-
-        const where: any = { ...params };
+        const { deptId, isAdmin } = param as any;
         if (!isAdmin && deptId) {
-            (where as any).deptId = deptId
+            (param as any).deptId = deptId
         }else if (!isAdmin && !deptId) {
-            (where as any).deptId = '-'
+            (param as any).deptId = '-'
+        }else if (isAdmin){
+            delete (param as any).deptId;
         }
-        
-        const [data, total] = await this.roleRepository.findAndCount({
-            where,
-            skip: (pageNum - 1) * pageSize,
-            take: pageSize,
-          });
-        return { rows: data, totalPage: Math.ceil(total / pageSize), recordCount: total };
+        delete (param as any).isAdmin;
+        return param.findWithQuery(this.roleRepository);
     }
     // 详情
     async detail(id: string): Promise<Role | null> {

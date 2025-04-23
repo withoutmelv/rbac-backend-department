@@ -140,6 +140,10 @@ export class PageParam<T>{
       }
     });
 
+    if (queryParam.deptId) {
+      qb.andWhere(`(entity.deptId = :deptId OR entity.dept_id = :deptId)`, { deptId: queryParam.deptId });
+    }
+
     // 关键字模糊查询
     if (queryParam.keywords && queryParam.searchKeys) {
       const keywordConditions = queryParam.searchKeys.split(',').map(searchKey =>

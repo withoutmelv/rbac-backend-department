@@ -1,6 +1,8 @@
 import { Context, Next } from 'koa';
 import { R } from '../../../utils/common-response';
 import knowledgeService from '../services/knowledge.service';
+import { KnowledgePageParam } from '../params/knowledge.param';
+import { plainToClass } from "class-transformer";
 
 class KnowledgeController {
   async save(ctx: Context, next: Next): Promise<void> {
@@ -39,8 +41,8 @@ class KnowledgeController {
   }
 
   async page(ctx: Context, next: Next): Promise<void> {
-    const query = ctx.request.body;
-    const res = await knowledgeService.page(query as any);
+    const param = plainToClass(KnowledgePageParam, ctx.request.body);
+    const res = await knowledgeService.page(param as any);
     ctx.body = R.ok(res);
     await next();
   }
