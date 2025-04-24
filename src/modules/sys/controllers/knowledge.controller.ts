@@ -46,6 +46,13 @@ class KnowledgeController {
     ctx.body = R.ok(res);
     await next();
   }
+
+  async list(ctx: Context, next: Next): Promise<void> {
+    const param = plainToClass(KnowledgePageParam, ctx.request.body);
+    const res = await knowledgeService.list(param as any);
+    ctx.body = R.ok(res);
+    await next();
+  }
 }
 
 export default new KnowledgeController();

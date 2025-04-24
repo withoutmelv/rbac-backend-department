@@ -67,6 +67,21 @@ class KnowledgeService {
     delete (param as any).isAdmin;
     return param.findWithQuery(this.repository);
   }
+
+  async list(param: KnowledgePageParam): Promise<{ rows: Knowledge[], recordCount: number, totalPage: number }> {
+    const { deptId, isAdmin } = param as any;
+    if (!isAdmin && deptId) {
+      (param as any).deptId = deptId
+    }else if (!isAdmin && !deptId) {
+      (param as any).deptId = '-'
+    }else if (isAdmin && deptId){
+      (param as any).deptId = [deptId, '-']
+    }else if (isAdmin && !deptId){
+      (param as any).deptId = '-'
+    }
+    delete (param as any).isAdmin;
+    return param.findWithQuery(this.repository);
+  }
 }
 
 export default new KnowledgeService();

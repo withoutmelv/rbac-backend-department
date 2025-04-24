@@ -140,7 +140,9 @@ export class PageParam<T>{
       }
     });
 
-    if (queryParam.deptId) {
+    if (Array.isArray(queryParam.deptId)) {
+      qb.andWhere(`(entity.deptId IN (:...deptIds) OR entity.dept_id IN (:...deptIds))`, { deptIds: queryParam.deptId });
+    } else if (queryParam.deptId){
       qb.andWhere(`(entity.deptId = :deptId OR entity.dept_id = :deptId)`, { deptId: queryParam.deptId });
     }
 

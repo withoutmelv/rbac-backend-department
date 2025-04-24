@@ -9,5 +9,6 @@ knowledgeRouter.post('/remove', knowledgeController.remove);
 knowledgeRouter.post('/detail', knowledgeController.detail);
 knowledgeRouter.post('/delete', knowledgeController.delete);
 knowledgeRouter.post('/page', knowledgeController.page);
+knowledgeRouter.post('/list', knowledgeController.list);
 
 export default knowledgeRouter;
