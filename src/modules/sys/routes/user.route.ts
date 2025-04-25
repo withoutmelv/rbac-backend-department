@@ -17,4 +17,6 @@ userRouter.post('/unLocked', userController.unLocked);
 userRouter.post('/resetPassword', userController.resetPassword);
 userRouter.post('/grantRole', userController.grantRole);
 userRouter.post('/findUserByRoleIds', userController.findUserByRoleIds);
+userRouter.post('/updatePwd', userController.updatePwd);
+userRouter.post('/updateInfo', userController.updateInfo);
 export default userRouter;

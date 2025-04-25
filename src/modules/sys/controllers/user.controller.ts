@@ -115,5 +115,20 @@ class UserController {
     ctx.body = R.ok(data);
     await next();
   }
+
+  async updatePwd(ctx: Context, next: Next): Promise<void> {
+    const oldPassword: string = (ctx.request.body as any).password;
+    const newPassword: string = (ctx.request.body as any).newPassword;
+    const data = await userService.updatePwd(oldPassword, newPassword);
+    ctx.body = R.ok();
+    await next();
+  }
+
+  async updateInfo(ctx: Context, next: Next): Promise<void> {
+    const param = plainToClass(UserParam, ctx.request.body);
+    await userService.update(param)
+    ctx.body = R.ok();
+    await next();
+  }
 }
 export default new UserController();

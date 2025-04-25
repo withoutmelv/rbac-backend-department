@@ -156,5 +156,32 @@ class UserService{
             .getMany();
     }
 
+    async updatePwd(oldPassword: string, newPassword: string): Promise<void> {
+        // 获取当前登录用户
+        const userId = getLoginUserId();
+        const user = await this.userRepository.findOneBy({ id: userId });
+        if (!user) {
+            throw new Error('用户不存在');
+        }
+
+        // 验证旧密码
+        const oldPasswordHash = md5Password(oldPassword, user.salt || '');
+        if (oldPasswordHash !== user.password) {
+            throw new Error('旧密码不正确');
+        }
+
+        // 设置新密码和salt
+        const salt = generateRandomString(8);
+        const newPasswordHash = md5Password(newPassword, salt);
+
+        // 更新用户信息
+        user.password = newPasswordHash;
+        user.salt = salt;
+        user.updateTime = new Date();
+        user.updateUser = userId;
+
+        await this.userRepository.save(user);
+    }
+
 }
 export default new UserService();
