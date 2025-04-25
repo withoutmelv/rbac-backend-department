@@ -35,6 +35,9 @@ class LowcodeService {
       if (param.deptId) {
         queryBuilder.andWhere('dept_id = :deptId', { deptId: param.deptId });
       }
+      if (param.ids && param.ids.length > 0) {
+        queryBuilder.andWhere(`${valueKey} NOT IN (:...ids)`, { ids: param.ids });
+      }
       // 执行查询
       let entities = await queryBuilder.getMany();
     

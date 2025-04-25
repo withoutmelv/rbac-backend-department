@@ -49,7 +49,6 @@ class RoleService{
   }
     // 分页查询方法
     async page(param: RolePageParam): Promise<{ rows: Role[], recordCount: number, totalPage: number }> {
-        
         const { deptId, isAdmin } = param as any;
         if (!isAdmin && deptId) {
             (param as any).deptId = deptId

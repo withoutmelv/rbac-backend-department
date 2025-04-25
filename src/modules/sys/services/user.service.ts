@@ -148,5 +148,12 @@ class UserService{
         await this.userRoleRepository.save(userRoleList);
     }
 
+    async findUserByRoleIds(roleIds: Array<string>): Promise<User[]> {
+        return await this.userRepository.createQueryBuilder('user')
+            .innerJoin(UserRole, 'userRole', 'user.id = userRole.userId')
+            .where('userRole.roleId IN (:...roleIds)', { roleIds })
+            .getMany();
+    }
+
 }
 export default new UserService();

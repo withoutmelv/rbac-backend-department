@@ -104,5 +104,16 @@ class UserController {
     ctx.body = R.ok(data);
     await next();
   }
+
+  async findUserByRoleIds(ctx: Context, next: Next): Promise<void> {
+    const roleIds: string[] = (ctx.request.body as any).roleIds;
+    if (!roleIds || roleIds.length === 0) {
+      ctx.body = R.ok([]);
+      return;
+    }
+    const data = await userService.findUserByRoleIds(roleIds);
+    ctx.body = R.ok(data);
+    await next();
+  }
 }
 export default new UserController();

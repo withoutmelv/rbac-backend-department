@@ -13,6 +13,7 @@ export class PageParam<T>{
   includeType?: number;
   extFieldNames?: string;
   deptId?: string;
+  ids?: string[];
   /**
    * 构建并执行查询
    * @param queryParam 查询参数
@@ -144,6 +145,10 @@ export class PageParam<T>{
       qb.andWhere(`(entity.deptId IN (:...deptIds) OR entity.dept_id IN (:...deptIds))`, { deptIds: queryParam.deptId });
     } else if (queryParam.deptId){
       qb.andWhere(`(entity.deptId = :deptId OR entity.dept_id = :deptId)`, { deptId: queryParam.deptId });
+    }
+
+    if (Array.isArray(queryParam.ids) && queryParam.ids.length > 0) {
+      qb.andWhere(`entity.id NOT IN (:...ids)`, { ids: queryParam.ids });
     }
 
     // 关键字模糊查询
