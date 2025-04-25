@@ -67,6 +67,7 @@ class UserService{
         //     await this.userRepository.update({ id: In(ids) }, { isDeleted: 1 });
         // } else {
             await this.userRepository.remove(await this.userRepository.findBy({ id: In(ids) }));
+            await this.userRoleRepository.delete({ userId: In(ids) });
         // }
     }
     async update(param: UserParam): Promise<void> {

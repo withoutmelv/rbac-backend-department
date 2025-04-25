@@ -1,6 +1,7 @@
 import { Repository, In } from 'typeorm';
 import { AppDataSource } from '../../../utils/data-source';
 import { Knowledge } from '../entities/knowledge';
+import { RoleKnowledge } from '../entities/role-knowledge';
 import { plainToClass } from "class-transformer";
 import { generateId } from "../../../utils/snowflake-id-generator";
 import { KnowledgePageParam } from '../params/knowledge.param';
@@ -19,9 +20,11 @@ interface PageResult<T> {
 
 class KnowledgeService {
   private repository: Repository<Knowledge>;
+  private roleKnowledgeRepository: Repository<RoleKnowledge>;
 
   constructor() {
     this.repository = AppDataSource.manager.getRepository(Knowledge);
+    this.roleKnowledgeRepository = AppDataSource.manager.getRepository(RoleKnowledge);
   }
 
   async save(data: Partial<Knowledge>): Promise<Knowledge> {
@@ -49,6 +52,7 @@ class KnowledgeService {
 
   async delete(ids: string[]): Promise<void> {
     await this.repository.delete({id: In(ids)});
+    await this.roleKnowledgeRepository.delete({knowledgeId: In(ids)}); // 删除角色知识关联
   }
 
   async detail(id: string): Promise<Knowledge | null> {
