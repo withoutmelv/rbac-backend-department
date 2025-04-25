@@ -19,4 +19,5 @@ userRouter.post('/grantRole', userController.grantRole);
 userRouter.post('/findUserByRoleIds', userController.findUserByRoleIds);
 userRouter.post('/updatePwd', userController.updatePwd);
 userRouter.post('/updateInfo', userController.updateInfo);
+userRouter.post('/updateAvatar', userController.updateAvatar);
 export default userRouter;

@@ -53,7 +53,7 @@ class UserController {
   }
   // 获取当前用户信息
   async info(ctx: Context, next: Next): Promise<void> {
-    ctx.body = R.ok(await userService.info());
+    ctx.body = R.ok(await userService.info(ctx));
 
     await next();
   }
@@ -127,6 +127,13 @@ class UserController {
   async updateInfo(ctx: Context, next: Next): Promise<void> {
     const param = plainToClass(UserParam, ctx.request.body);
     await userService.updateInfo(param)
+    ctx.body = R.ok();
+    await next();
+  }
+
+  async updateAvatar(ctx: Context, next: Next): Promise<void> {
+    const avatar: string = (ctx.request.body as any).avatar;
+    await userService.updateAvatar(avatar)
     ctx.body = R.ok();
     await next();
   }

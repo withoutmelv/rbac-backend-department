@@ -11,6 +11,7 @@ import { errorHandler } from './utils/error-handler';
 import { authMiddleware } from './middlewares/auth-middleware';
 import getEnumParser from './utils/enum-parser';
 import cors from 'koa-cors'; // 引入 koa-cors 中间件
+import staticServer from 'koa-static'; // 引入 koa-static 中间件
 
 // 加载环境变量
 dotenv.config({ path: `.env.${process.env.NODE_ENV || 'development'}` })
@@ -20,6 +21,9 @@ const app = new Koa();
 
 // 添加跨域中间件
 app.use(cors());
+
+// 1. 配置静态资源访问
+app.use(staticServer('doc'));
 
 // 全局错误处理中间件
 app.use(errorHandler())

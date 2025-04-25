@@ -84,12 +84,10 @@ class UserService{
         entity.updateUser = userId;
         await this.userRepository.update({ id: entity.id }, entity);
     }
-    async info(){
+    async info(ctx: any){
         const userInfo = getLoginUser();
-        console.log(userInfo);
         const userDetail = await this.userRepository.findOneBy({ id: userInfo.id });
-        console.log(userDetail);
-        return {...userInfo, deptId: userDetail?.deptId, email: userDetail?.email}
+        return {...userInfo, deptId: userDetail?.deptId, email: userDetail?.email, avatar: 'http://' + ctx.host + userDetail?.avatar, mobilePhone: userDetail?.mobilePhone}
     }
     permCode(){
         return getLoginUser().perms || []
@@ -196,6 +194,11 @@ class UserService{
         entity.updateTime = now;
         entity.updateUser = userId;
         await this.userRepository.update({ id: userId }, entity);
+    }
+
+    async updateAvatar(avatar: string): Promise<void> {
+        const userId = getLoginUserId();
+        await this.userRepository.update({ id: userId }, { avatar });
     }
 
 }

@@ -28,7 +28,6 @@ class KnowledgeService {
   }
 
   async save(data: Partial<Knowledge>): Promise<Knowledge> {
-    console.log('data',data)
     const entity = plainToClass(Knowledge, data, {
       excludeExtraneousValues: true, // 排除多余的属性,
     });
