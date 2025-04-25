@@ -126,7 +126,7 @@ class UserController {
 
   async updateInfo(ctx: Context, next: Next): Promise<void> {
     const param = plainToClass(UserParam, ctx.request.body);
-    await userService.update(param)
+    await userService.updateInfo(param)
     ctx.body = R.ok();
     await next();
   }

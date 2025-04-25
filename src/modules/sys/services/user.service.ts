@@ -183,5 +183,20 @@ class UserService{
         await this.userRepository.save(user);
     }
 
+    async updateInfo(param: UserParam): Promise<void> {
+        // 自动映射到 User 实体
+        const entity = plainToClass(User, param, {
+            excludeExtraneousValues: true, // 排除多余的属性,
+        });
+        entity.password = undefined;
+        entity.salt = undefined;
+        entity.adminType = undefined;
+        const now = new Date();
+        const userId = getLoginUserId();
+        entity.updateTime = now;
+        entity.updateUser = userId;
+        await this.userRepository.update({ id: userId }, entity);
+    }
+
 }
 export default new UserService();

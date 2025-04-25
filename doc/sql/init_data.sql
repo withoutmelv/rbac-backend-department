@@ -560,7 +560,7 @@ CREATE TABLE `sys_user`  (
   `create_user` bigint(20) NULL DEFAULT NULL COMMENT '创建用户',
   `update_time` datetime(3) NULL DEFAULT NULL COMMENT '更新时间',
   `update_user` bigint(20) NULL DEFAULT NULL COMMENT '更新用户',
-  `guest_id` varchar(255) NULL DEFAULT 0 COMMENT '游客ID',
+  `guest_id` varchar(255) NULL DEFAULT NULL COMMENT '游客ID',
   `is_deleted` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_user_user_name`(`user_name`) USING BTREE,
