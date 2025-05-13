@@ -87,7 +87,8 @@ class UserService{
     async info(ctx: any){
         const userInfo = getLoginUser();
         const userDetail = await this.userRepository.findOneBy({ id: userInfo.id });
-        return {...userInfo, deptId: userDetail?.deptId, email: userDetail?.email, avatar: 'http://' + ctx.host + userDetail?.avatar, mobilePhone: userDetail?.mobilePhone}
+        const ip = ctx.host.includes(process.env.PORT) ? ctx.host : ctx.host + ':' + process.env.PORT;
+        return {...userInfo, deptId: userDetail?.deptId, email: userDetail?.email, avatar: 'http://' + ip + userDetail?.avatar, mobilePhone: userDetail?.mobilePhone}
     }
     permCode(){
         return getLoginUser().perms || []
